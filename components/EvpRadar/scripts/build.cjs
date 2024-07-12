@@ -5,11 +5,11 @@ process.env.NODE_ENV = "development";
 
 const path = require("path");
 // const { cp } = require("fs");
-const utils = require("../utils.cjs");
+const utils = require("./utils.cjs");
 const { execSync } = require("child_process");
 
-const dist = path.join(__dirname, "..", "dist");
-const root = __dirname;
+const dist = path.join(__dirname, "../dist");
+const root = path.join(__dirname, "..");
 
 try {
   console.log("Step 1 : cleaning up dist folder...");
