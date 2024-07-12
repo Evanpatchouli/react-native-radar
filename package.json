@@ -1,7 +1,7 @@
 {
   "name": "react-native-radar",
   "main": "expo-router/entry",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple radar chart for react native applications",
   "keywords": [
     "react native",

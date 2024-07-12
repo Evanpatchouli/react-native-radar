@@ -6,8 +6,25 @@ import EvpRadar from "../../components/EvpRadar";
 
 const MyRadar = (
   <EvpRadar
+    // containerViewProps={{
+    //   style: {
+    //     borderColor: "rgba(0, 0, 200, 0.5)",
+    //     borderWidth: 1,
+    //     borderRadius: 10,
+    //     overflow: "hidden",
+    //     margin: 10,
+    //     padding: 10,
+    //   },
+    // }}
     data={[100, 20, 30, 10, 40]}
     labels={["Aaa", "Bbb", "Ccc", "Ddd", "Eee"]}
+    // labels={[
+    //   <Text key="Aaa">Aaa</Text>,
+    //   <Text key="Bbb">Bbb</Text>,
+    //   <Text key="Ccc">Ccc</Text>,
+    //   <Text key="Ddd">Ddd</Text>,
+    //   <Text key="Eee">Eee</Text>,
+    // ]}
     radius={100} // default: 100
     backgroundColor="rgba(0, 0, 200, 0.05)" //default: none
     strokeColor="rgba(0, 0, 200, 0.5)" // none
@@ -32,7 +49,8 @@ const MyRadar = (
     }}
     ScaleLine={{
       // default: none of scale lines
-      type: 'solid', // solid, none
+      type: "solid", // solid, none
+      shape: "polygon", // polygon, circle. If not specified, it will be same as the shape of border. If border is not specified, it will be polygon.
       number: 4,
       width: 1, // default: 1
       color: "rgba(0, 0, 200, 0.2)", // default: grey

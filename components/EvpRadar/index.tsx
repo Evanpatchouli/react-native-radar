@@ -1,11 +1,11 @@
 import React from "react";
-import { View } from "react-native";
+import { View, ViewProps } from "react-native";
 import { Svg, Polygon, Line, Text, G, TextProps, Circle } from "react-native-svg";
 import "react-native-svg";
 
 interface RadarProps {
   data: number[];
-  labels: string[];
+  labels: string[] | React.JSX.Element[];
   radius?: number;
   /** @default "null" */
   backgroundColor?: string;
@@ -41,12 +41,14 @@ interface RadarProps {
   ScaleLine?: {
     number: number;
     type: "dashed" | "solid" | "none";
+    shape?: "circle" | "polygon";
     color?: string;
     width?: number;
     /** @default [20,5] */
     dashArray?: [number, number];
     opacity?: number;
   };
+  containerViewProps?: ViewProps;
 }
 
 export default function EvpRadar({ data, labels, ...props }: RadarProps) {
@@ -84,8 +86,11 @@ export default function EvpRadar({ data, labels, ...props }: RadarProps) {
     dashArray: props.Axis?.type === "dashed" ? props.Axis?.dashArray ?? [10, 5] : void 0,
   };
 
+  const ScaleShapeGiven = props.ScaleLine?.shape ?? props.border?.type;
+
   const ScaleLineConnfig = {
     type: props.ScaleLine?.type ?? "dashed",
+    shape: ScaleShapeGiven === "none" ? "polygon" : ScaleShapeGiven || "polygon",
     number: props.ScaleLine?.number || 0,
     color: props.ScaleLine?.color ?? "gray",
     width: props.ScaleLine?.width ?? 1,
@@ -96,7 +101,15 @@ export default function EvpRadar({ data, labels, ...props }: RadarProps) {
   const labelSpace = props.labelSpace || 0;
 
   return (
-    <View>
+    <View
+      {...props.containerViewProps}
+      style={[
+        ...(props.containerViewProps?.style ? [props.containerViewProps.style] : []),
+        {
+          position: "relative",
+        },
+      ]}
+    >
       <Svg width={radius * 3} height={radius * 3}>
         <G x={radius * 1.5} y={radius * 1.5}>
           {/** @Border_of_circle 圆形边界 */}
@@ -122,7 +135,23 @@ export default function EvpRadar({ data, labels, ...props }: RadarProps) {
               strokeWidth={radarBorderConfig.width}
             />
           )}
-          {props.border?.type === "polygon" &&
+          {/** @ScaleLine_of_Circle 圆形刻度 */}
+          {ScaleLineConnfig.shape === "circle" &&
+            Array.from({ length: props.ScaleLine?.number || 0 }, (_, index) => index).map((_, t) => (
+              <Circle
+                cx={0}
+                cy={0}
+                r={radarBorderConfig.radius * (1 / ((ScaleLineConnfig.number || 0) + 1)) * (t + 1)}
+                fill={"none"}
+                stroke={ScaleLineConnfig.color}
+                strokeWidth={ScaleLineConnfig.width}
+                strokeDasharray={ScaleLineConnfig.dashArray}
+                strokeOpacity={ScaleLineConnfig.opacity}
+                key={t}
+              />
+            ))}
+          {/** @ScaleLine_of_Polugon 多边形刻度 */}
+          {ScaleLineConnfig.shape === "polygon" &&
             Array.from({ length: props.ScaleLine?.number || 0 }, (_, index) => index).map((_, t) => (
               <Polygon
                 points={data
@@ -184,23 +213,48 @@ export default function EvpRadar({ data, labels, ...props }: RadarProps) {
               />
             );
           })}
-          {/** @Label 标签 */}
-          {labels.map((label, i) => {
-            const { x, y } = polarToCartesian(angleSlice * i, radius + labelSpace);
-            return (
-              <Text
-                x={x}
-                y={y}
-                key={i}
-                textAnchor="middle"
-                {...(typeof props.labelProps === "function" ? props.labelProps(i) : props.labelProps)}
-              >
-                {label}
-              </Text>
-            );
-          })}
+          {/** @Label_of_string 标签 */}
+          {typeof labels?.[0] === "string" &&
+            labels.map((label, i) => {
+              const { x, y } = polarToCartesian(angleSlice * i, radius + labelSpace);
+              return (
+                <Text
+                  x={x}
+                  y={y}
+                  key={i}
+                  textAnchor="middle"
+                  {...(typeof props.labelProps === "function" ? props.labelProps(i) : props.labelProps)}
+                >
+                  {label}
+                </Text>
+              );
+            })}
         </G>
       </Svg>
+
+      {/** @Label_of_JSXElement 自定义标签 */}
+      {typeof labels?.[0] !== "string" && (
+        <View
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 0,
+            height: 0,
+          }}
+        >
+          {labels?.[0] &&
+            labels.map((label, i) => {
+              const { x, y } = polarToCartesian(angleSlice * i, radius + labelSpace);
+              return (
+                <View key={i} style={{ position: "absolute", left: x, top: y, transform: "translate(-50%, -50%)" }}>
+                  {label}
+                </View>
+              );
+            })}
+        </View>
+      )}
     </View>
   );
 }
