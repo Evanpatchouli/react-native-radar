@@ -7,7 +7,7 @@ import EvpRadar from "../../components/EvpRadar";
 const MyRadar = (
   <EvpRadar
     data={[100, 20, 30, 10, 40]}
-    labels={["耐力", "爆发", "平衡", "稳定", "柔韧"]}
+    labels={["Aaa", "Bbb", "Ccc", "Ddd", "Eee"]}
     radius={100} // default: 100
     backgroundColor="rgba(0, 0, 200, 0.05)" //default: none
     strokeColor="rgba(0, 0, 200, 0.5)" // none
@@ -32,7 +32,7 @@ const MyRadar = (
     }}
     ScaleLine={{
       // default: none of scale lines
-      type: "solid", // solid, none
+      type: 'solid', // solid, none
       number: 4,
       width: 1, // default: 1
       color: "rgba(0, 0, 200, 0.2)", // default: grey

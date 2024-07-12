@@ -1,0 +1,42 @@
+{
+  "name": "@evanpatchouli/react-native-radar",
+  "version": "1.0.0",
+  "private": false,
+  "description": "A simple radar chart for react native applications",
+  "keywords": [
+    "react native",
+    "chart",
+    "radar",
+    "component"
+  ],
+  "author": {
+    "name": "evanpatchouli",
+    "email": "evanpatchouli@foxmail.com",
+    "url": "https://github.com/Evanpatchouli"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/jun-laner/react-native-radar.git"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.cjs",
+    "build:hot": "node scripts/building.cjs"
+  },
+  "license": "MIT",
+  "browser": {
+    "crypto": false
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-native": "0.72.10",
+    "react-native-svg": "^15.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^16.18.40",
+    "@types/react": "^18.2.20",
+    "typescript": "^4.9.5"
+  }
+}
